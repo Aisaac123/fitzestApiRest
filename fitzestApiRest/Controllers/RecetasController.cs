@@ -41,10 +41,11 @@ namespace fitzestApiRest.Controllers
                 {
                     new NpgsqlParameter("p_calorias", entity.Calorias),
                     new NpgsqlParameter("p_proteinas", entity.Proteinas),
-                    new NpgsqlParameter("p_id_dieta", entity.IdDieta)
+                    new NpgsqlParameter("p_id_dieta", entity.IdDieta),
+                    new NpgsqlParameter("p_nombre", entity.Nombre)
                 };
 
-                await _context.Database.ExecuteSqlRawAsync("SELECT insertar_recetas(@p_calorias, @p_proteinas, @p_id_dieta)", parameters);
+                await _context.Database.ExecuteSqlRawAsync("SELECT insertar_recetas(@p_calorias, @p_proteinas, @p_id_dieta,@p_nombre)", parameters);
 
                 return "Ok";
             }

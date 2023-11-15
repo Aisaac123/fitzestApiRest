@@ -39,10 +39,13 @@ namespace fitzestApiRest.Controllers
                 var parameters = new NpgsqlParameter[]
                 {
                     new NpgsqlParameter("p_id_recetas", entity.IdRecetas),
-                    new NpgsqlParameter("p_id_alimentos", entity.IdAlimentos)
+                    new NpgsqlParameter("p_id_alimentos", entity.IdAlimentos),
+                    new NpgsqlParameter("p_numero_ingredientes", entity.NumeroIngredientes),
+                    new NpgsqlParameter("p_calorias", entity.Calorias),
+                    new NpgsqlParameter("p_proteinas", entity.Proteinas)
                 };
 
-                await _context.Database.ExecuteSqlRawAsync("SELECT insertar_preparar_comida(@p_id_recetas, @p_id_alimentos)", parameters);
+                await _context.Database.ExecuteSqlRawAsync("SELECT insertar_preparar_comida(@p_id_recetas, @p_id_alimentos, @p_numero_ingredientes, @p_calorias, @p_proteinas)", parameters);
 
                 return "Ok";
             }
@@ -51,6 +54,7 @@ namespace fitzestApiRest.Controllers
                 return ex.Message;
             }
         }
+
 
 
         protected async override Task<string> UpdateProcedure(PrepararComida entity, int OldId)

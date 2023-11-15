@@ -12,6 +12,7 @@ public partial class Dieta
 
     public decimal? Proteinas { get; set; }
 
+    [JsonIgnore]
     public string? Nombreusuario { get; set; }
 
     [JsonIgnore]

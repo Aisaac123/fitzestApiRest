@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace fitzestApiRest.Models;
 
@@ -15,6 +16,7 @@ public partial class Ingrediente
 
     public decimal? Peso { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<PrepararComida> Prepararcomidas { get; set; } = new List<PrepararComida>();
 }
 

@@ -101,13 +101,29 @@ namespace fitzestApiRest.Controllers
 
         protected async override Task<List<Usuario>> SetContextList()
         {
-            var list = await _context.Set<Usuario>().Include(arg => arg.Estado).Include(arg => arg.PerfilUsuario).Include(arg => arg.Rutinas).Include(arg => arg.Dieta).ToListAsync();
+            var list = await _context.Set<Usuario>()
+                .Include(arg => arg.Estado)
+                .Include(arg => arg.PerfilUsuario)
+                .Include(arg => arg.Rutinas)
+                .Include(arg => arg.Dieta)
+                .ThenInclude(arg => arg.Productos)
+                .Include(arg => arg.Dieta)
+                .ThenInclude(arg => arg.Recetas)
+                .ThenInclude(arg => arg.Prepararcomida)
+                .ToListAsync();
             return list;
         }
 
         protected async override Task<Usuario> SetContextEntity(string id)
         {
-            var entity = await _context.Set<Usuario>().Include(arg => arg.Estado).Include(arg => arg.PerfilUsuario).Include(arg => arg.Rutinas).Include(arg => arg.Dieta).FirstOrDefaultAsync(arg => arg.Nombreusuario == id);
+            var entity = await _context.Set<Usuario>()
+                .Include(arg => arg.Estado)
+                .Include(arg => arg.PerfilUsuario)
+                .Include(arg => arg.Rutinas)
+                .Include(arg => arg.Dieta)
+                .ThenInclude(arg => arg.Productos)  // Ajuste aquí
+                .FirstOrDefaultAsync(arg => arg.Nombreusuario == id);
+
             return entity;
         }
 
