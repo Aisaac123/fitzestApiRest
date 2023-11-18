@@ -3,6 +3,7 @@ using fitzestApiRest.Models;
 using fitzestApiRest.Models.Context;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using NpgsqlTypes;
 
 namespace fitzestApiRest.Controllers
 {
@@ -38,12 +39,13 @@ namespace fitzestApiRest.Controllers
             {
                 var parameters = new NpgsqlParameter[]
                 {
-                    new NpgsqlParameter("p_id", entity.Id),
-                    new NpgsqlParameter("p_valorprogrecion", entity.Valorprogrecion),
-                    new NpgsqlParameter("p_dia_inicio", entity.DiaInicio)
+
+            new NpgsqlParameter("p_limite_proteina", NpgsqlDbType.Numeric) { Value = entity.LimiteProteina },
+            new NpgsqlParameter("p_limite_calorias", NpgsqlDbType.Numeric) { Value = entity.LimiteCalorias },
+            new NpgsqlParameter("p_ultima_modificacion", NpgsqlDbType.Date) { Value = entity.UltimaModificacion }
                 };
 
-                await _context.Database.ExecuteSqlRawAsync("SELECT insertar_estado(@p_id, @p_valorprogrecion, @p_dia_inicio)", parameters);
+                await _context.Database.ExecuteSqlRawAsync("SELECT insertar_estado( @p_limite_proteina, @p_limite_calorias, @p_ultima_modificacion)", parameters);
 
                 return "Ok";
             }
@@ -52,6 +54,8 @@ namespace fitzestApiRest.Controllers
                 return ex.Message;
             }
         }
+
+
 
 
         protected async override Task<string> UpdateProcedure(Estado entity, int OldId)
@@ -60,12 +64,13 @@ namespace fitzestApiRest.Controllers
             {
                 var parameters = new NpgsqlParameter[]
                 {
-                    new NpgsqlParameter("p_id", OldId),
-                    new NpgsqlParameter("p_valorprogrecion", entity.Valorprogrecion),
-                    new NpgsqlParameter("p_dia_inicio", entity.DiaInicio)
+            new NpgsqlParameter("p_id", NpgsqlDbType.Integer) { Value = OldId },
+            new NpgsqlParameter("p_limite_proteina", NpgsqlDbType.Numeric) { Value = entity.LimiteProteina },
+            new NpgsqlParameter("p_limite_calorias", NpgsqlDbType.Numeric) { Value = entity.LimiteCalorias },
+            new NpgsqlParameter("p_ultima_modificacion", NpgsqlDbType.Date) { Value = entity.UltimaModificacion }
                 };
 
-                await _context.Database.ExecuteSqlRawAsync("SELECT actualizar_estado(@p_id, @p_valorprogrecion, @p_dia_inicio)", parameters);
+                await _context.Database.ExecuteSqlRawAsync("SELECT actualizar_estado(@p_id, @p_limite_proteina, @p_limite_calorias, @p_ultima_modificacion)", parameters);
 
                 return "Ok";
             }
@@ -74,6 +79,7 @@ namespace fitzestApiRest.Controllers
                 return ex.Message;
             }
         }
+
 
         protected async override Task<Estado> SetContextEntity(int id)
         {

@@ -38,15 +38,14 @@ namespace fitzestApiRest.Controllers
             {
                 var parameters = new NpgsqlParameter[]
                 {
-                    new NpgsqlParameter("p_id", entity.Id),
-                    new NpgsqlParameter("p_nombre", entity.Nombre),
-                    new NpgsqlParameter("p_img", entity.Img),
-                    new NpgsqlParameter("p_descripcion", entity.Descripcion),
-                    new NpgsqlParameter("p_dia", entity.Dia),
-                    new NpgsqlParameter("p_cedulausuario", entity.Cedulausuario)
+            new NpgsqlParameter("p_nombre", entity.Nombre),
+            new NpgsqlParameter("p_img", entity.Img),
+            new NpgsqlParameter("p_descripcion", entity.Descripcion),
+            new NpgsqlParameter("p_dia", entity.Dia),
+            new NpgsqlParameter("p_cedulausuario", entity.Cedulausuario)
                 };
 
-                await _context.Database.ExecuteSqlRawAsync("SELECT insertar_rutina(@p_id, @p_nombre, @p_img, @p_descripcion, @p_dia, @p_cedulausuario)", parameters);
+                await _context.Database.ExecuteSqlRawAsync("SELECT insertar_rutina(@p_nombre, @p_img, @p_descripcion, @p_dia, @p_cedulausuario)", parameters);
 
                 return "Ok";
             }
@@ -55,6 +54,7 @@ namespace fitzestApiRest.Controllers
                 return ex.Message;
             }
         }
+
 
 
         protected async override Task<string> UpdateProcedure(Rutina entity, int OldId)

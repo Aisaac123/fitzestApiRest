@@ -12,13 +12,14 @@ public partial class Producto
 
     public decimal? Calorias { get; set; }
 
+    public decimal? Proteina { get; set; } // Nueva propiedad
+
     public string? Descripcion { get; set; }
 
     public DateOnly? Fechafinalizacion { get; set; }
 
-    [JsonIgnore]
     public int? IdDieta { get; set; }
-    [JsonIgnore]
+
     public virtual Dieta? Dieta { get; set; }
 }
 

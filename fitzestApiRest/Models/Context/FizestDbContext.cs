@@ -60,6 +60,7 @@ public partial class FizestDbContext : DbContext
                 .HasConstraintName("detallesrutina_id_rutina_fkey");
         });
 
+
         modelBuilder.Entity<Dieta>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("dieta_pkey");
@@ -68,13 +69,13 @@ public partial class FizestDbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Calorias)
-                .HasPrecision(5, 2)
+                .HasPrecision(7, 2)
                 .HasColumnName("calorias");
             entity.Property(e => e.Nombreusuario)
                 .HasMaxLength(50)
                 .HasColumnName("nombreusuario");
             entity.Property(e => e.Proteinas)
-                .HasPrecision(5, 2)
+                .HasPrecision(7, 2)
                 .HasColumnName("proteinas");
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.Dieta)
@@ -89,21 +90,36 @@ public partial class FizestDbContext : DbContext
             entity.ToTable("ejercicio");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
                 .HasColumnName("id");
-            entity.Property(e => e.Consumocalorias)
-                .HasPrecision(5, 2)
-                .HasColumnName("consumocalorias");
-            entity.Property(e => e.Descripcion).HasColumnName("descripcion");
+
             entity.Property(e => e.Nombre)
-                .HasMaxLength(100)
-                .HasColumnName("nombre");
+                .HasColumnName("nombre")
+                .HasMaxLength(100);
+
             entity.Property(e => e.Peso)
-                .HasPrecision(5, 2)
-                .HasColumnName("peso");
-            entity.Property(e => e.Repeticiones).HasColumnName("repeticiones");
-            entity.Property(e => e.Tiempodescanso).HasColumnName("tiempodescanso");
+                .HasColumnName("peso")
+                .HasPrecision(7, 2);
+
+            entity.Property(e => e.Repeticiones)
+                .HasColumnName("repeticiones");
+
+            entity.Property(e => e.Descripcion)
+                .HasColumnName("descripcion");
+
+            entity.Property(e => e.Tiempodescanso)
+                .HasColumnName("tiempodescanso");
+
+            entity.Property(e => e.Consumocalorias)
+                .HasColumnName("consumocalorias")
+                .HasPrecision(7, 2);
+
+            entity.Property(e => e.Img)
+                .HasColumnName("img")
+                .HasMaxLength(255);
         });
+
+
+
 
         modelBuilder.Entity<Estado>(entity =>
         {
@@ -114,8 +130,10 @@ public partial class FizestDbContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
-            entity.Property(e => e.DiaInicio).HasColumnName("dia_inicio");
-            entity.Property(e => e.Valorprogrecion).HasColumnName("valorprogrecion");
+
+            entity.Property(e => e.UltimaModificacion).HasColumnName("ultimamodificacion"); // Cambio de nombre
+            entity.Property(e => e.LimiteProteina).HasColumnName("limiteproteina"); // Nueva columna
+            entity.Property(e => e.LimiteCalorias).HasColumnName("limitecalorias"); // Nueva columna
         });
 
         modelBuilder.Entity<Ingrediente>(entity =>
@@ -161,8 +179,8 @@ public partial class FizestDbContext : DbContext
             entity.ToTable("prepararcomida");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.IdAlimentos).HasColumnName("id_alimentos");
             entity.Property(e => e.IdRecetas).HasColumnName("id_recetas");
+            entity.Property(e => e.IdAlimentos).HasColumnName("id_alimentos");
             entity.Property(e => e.NumeroIngredientes).HasColumnName("numeroingredientes");
             entity.Property(e => e.Calorias).HasColumnName("calorias");
             entity.Property(e => e.Proteinas).HasColumnName("proteinas");
@@ -177,6 +195,8 @@ public partial class FizestDbContext : DbContext
         });
 
 
+
+
         modelBuilder.Entity<Producto>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("producto_pkey");
@@ -185,8 +205,11 @@ public partial class FizestDbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Calorias)
-                .HasPrecision(5, 2)
+                .HasPrecision(7, 2)
                 .HasColumnName("calorias");
+            entity.Property(e => e.Proteina)
+                .HasPrecision(7, 2) // Nueva columna
+                .HasColumnName("proteina");
             entity.Property(e => e.Descripcion).HasColumnName("descripcion");
             entity.Property(e => e.Fechafinalizacion).HasColumnName("fechafinalizacion");
             entity.Property(e => e.IdDieta).HasColumnName("id_dieta");
@@ -200,28 +223,34 @@ public partial class FizestDbContext : DbContext
         });
 
         modelBuilder.Entity<Receta>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("recetas_pkey");
+{
+    entity.HasKey(e => e.Id).HasName("recetas_pkey");
 
-            entity.ToTable("recetas");
+    entity.ToTable("recetas");
 
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Calorias)
-                .HasPrecision(10, 2)
-                .HasColumnName("calorias");
-            entity.Property(e => e.IdDieta).HasColumnName("id_dieta");
-            entity.Property(e => e.Proteinas)
-                .HasPrecision(10, 2)
-                .HasColumnName("proteinas");
+    entity.Property(e => e.Id).HasColumnName("id");
+    entity.Property(e => e.Calorias)
+        .HasPrecision(10, 2)
+        .HasColumnName("calorias");
+    entity.Property(e => e.IdDieta).HasColumnName("id_dieta");
+    entity.Property(e => e.Proteinas)
+        .HasPrecision(10, 2)
+        .HasColumnName("proteinas");
 
-            entity.Property(e => e.Nombre)
-                .HasColumnName("nombre")
-                .HasMaxLength(100);
+    entity.Property(e => e.Nombre)
+        .HasColumnName("nombre")
+        .HasMaxLength(100);
 
-            entity.HasOne(d => d.Dieta).WithMany(p => p.Recetas)
-                .HasForeignKey(d => d.IdDieta)
-                .HasConstraintName("recetas_id_dieta_fkey");
-        });
+    // Nueva propiedad img
+    entity.Property(e => e.Img)
+        .HasColumnName("img")
+        .HasMaxLength(255);  // Ajusta la longitud según tus necesidades
+
+    entity.HasOne(d => d.Dieta).WithMany(p => p.Recetas)
+        .HasForeignKey(d => d.IdDieta)
+        .HasConstraintName("recetas_id_dieta_fkey");
+});
+
 
 
         modelBuilder.Entity<Rutina>(entity =>

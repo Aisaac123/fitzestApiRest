@@ -3,6 +3,7 @@ using fitzestApiRest.Models;
 using fitzestApiRest.Models.Context;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using NpgsqlTypes;
 
 namespace fitzestApiRest.Controllers
 {
@@ -39,13 +40,14 @@ namespace fitzestApiRest.Controllers
             {
                 var parameters = new NpgsqlParameter[]
                 {
-                    new NpgsqlParameter("p_calorias", entity.Calorias),
-                    new NpgsqlParameter("p_proteinas", entity.Proteinas),
-                    new NpgsqlParameter("p_id_dieta", entity.IdDieta),
-                    new NpgsqlParameter("p_nombre", entity.Nombre)
+                    new NpgsqlParameter("p_calorias", NpgsqlDbType.Numeric) { Value = entity.Calorias },
+                    new NpgsqlParameter("p_proteinas", NpgsqlDbType.Numeric) { Value = entity.Proteinas },
+                    new NpgsqlParameter("p_id_dieta", NpgsqlDbType.Integer) { Value = entity.IdDieta },
+                    new NpgsqlParameter("p_nombre", NpgsqlDbType.Varchar) { Value = entity.Nombre },
+                    new NpgsqlParameter("p_img", NpgsqlDbType.Varchar) { Value = entity.Img } // Agregado para la nueva columna img
                 };
 
-                await _context.Database.ExecuteSqlRawAsync("SELECT insertar_recetas(@p_calorias, @p_proteinas, @p_id_dieta,@p_nombre)", parameters);
+                await _context.Database.ExecuteSqlRawAsync("SELECT insertar_recetas(@p_calorias, @p_proteinas, @p_id_dieta, @p_nombre, @p_img)", parameters);
 
                 return "Ok";
             }
@@ -54,6 +56,7 @@ namespace fitzestApiRest.Controllers
                 return ex.Message;
             }
         }
+
 
 
 
@@ -81,14 +84,16 @@ namespace fitzestApiRest.Controllers
 
         protected async override Task<Receta> SetContextEntity(int id)
         {
-            var entity = await _context.Set<Receta>().Include(arg => arg.Prepararcomida).FirstOrDefaultAsync(arg => arg.Id == id);
+            var entity = await _context.Set<Receta>().Include(arg => arg.Prepararcomida)
+                .ThenInclude(arg => arg.Ingrediente)
+                .FirstOrDefaultAsync(arg => arg.Id == id);
 
             return entity;
         }
 
         protected async override Task<List<Receta>> SetContextList()
         {
-            var list = await _context.Set<Receta>().Include(arg => arg.Prepararcomida).ToListAsync();
+            var list = await _context.Set<Receta>().Include(arg => arg.Prepararcomida).ThenInclude(arg => arg.Ingrediente).ToListAsync();
             return list;
         }
 

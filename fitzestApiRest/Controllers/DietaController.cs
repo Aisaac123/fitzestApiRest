@@ -62,7 +62,7 @@ namespace fitzestApiRest.Controllers
                 {
             new NpgsqlParameter("p_id", OldId), // OldId es el Id antiguo que se usará en la cláusula WHERE
             new NpgsqlParameter("p_calorias", entity.Calorias),
-                    new NpgsqlParameter("p_proteinas", entity.Proteinas),
+            new NpgsqlParameter("p_proteinas", entity.Proteinas),
             new NpgsqlParameter("p_nombreusuario", entity.Nombreusuario)
                 };
 
@@ -80,6 +80,7 @@ namespace fitzestApiRest.Controllers
         protected async override Task<Dieta> SetContextEntity(int id)
         {
             var entity = await _context.Set<Dieta>().Include(arg => arg.Productos).Include(arg => arg.Recetas).FirstOrDefaultAsync(arg => arg.Id == id);
+
             return entity;
         }
 

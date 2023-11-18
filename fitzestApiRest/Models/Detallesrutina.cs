@@ -16,3 +16,4 @@ public partial class Detallesrutina
     public virtual Rutina? Rutina { get; set; }
 }
 
+
