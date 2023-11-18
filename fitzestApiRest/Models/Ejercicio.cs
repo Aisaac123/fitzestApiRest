@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace fitzestApiRest.Models;
 
@@ -18,6 +19,7 @@ public partial class Ejercicio
     public int? Tiempodescanso { get; set; }
 
     public decimal? Consumocalorias { get; set; }
-
+    public string Img { get; set; }
+    
     public virtual ICollection<Detallesrutina> Detallesrutinas { get; set; } = new List<Detallesrutina>();
 }
