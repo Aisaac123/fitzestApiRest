@@ -37,12 +37,12 @@ namespace fitzestApiRest.Controllers
             {
                 var parameters = new NpgsqlParameter[]
                 {
-            new NpgsqlParameter("p_id", entity.Id),
+            
             new NpgsqlParameter("p_fechainiciorutina", entity.Fechainiciorutina),
             new NpgsqlParameter("p_tiporutina", entity.Tiporutina)
                 };
 
-                await _context.Database.ExecuteSqlRawAsync("SELECT insertar_perfil_usuario(@p_id, @p_fechainiciorutina, @p_tiporutina)", parameters);
+                await _context.Database.ExecuteSqlRawAsync("SELECT insertar_perfil_usuario( @p_fechainiciorutina, @p_tiporutina)", parameters);
 
                 return "Ok";
             }
